@@ -24,10 +24,11 @@
         </div>
       </div>
       <div class="nav-links">
+        <a href="#integrations" class="nav-link">Live Integrations</a>
         <a href="#traces" class="nav-link active">Trace Viewer</a>
         <a href="#simulator" class="nav-link">Crash Simulator</a>
         <a href="#benchmarks" class="nav-link">Benchmark Scorecard</a>
-        <a href="https://github.com" target="_blank" class="btn-github">Repository</a>
+        <a href="https://github.com/Ayan-Ahmad-0/Relay" target="_blank" class="btn-github">Repository</a>
       </div>
     </div>
   </header>
@@ -85,6 +86,82 @@
 
   <!-- Main Workspace -->
   <main class="main-container">
+
+    <!-- Section 0: Connected Live Ecosystem (Clearance & Ledgerline) -->
+    <section id="integrations" class="section-card integrations-card">
+      <div class="section-header">
+        <div>
+          <h3 class="section-title">🔗 Connected Live Services Ecosystem</h3>
+          <p class="section-desc">Relay coordinates two live upstream production microservices before taking any external support actions.</p>
+        </div>
+        <div class="badge-group">
+          <span class="badge live-badge">2 Live Endpoints Connected</span>
+        </div>
+      </div>
+
+      <div class="integrations-grid">
+        <!-- Clearance Project 1 -->
+        <div class="integration-box">
+          <div class="integration-head">
+            <div class="integration-icon-title">
+              <span class="integration-icon">🛡️</span>
+              <div>
+                <h4>Project 1: Clearance</h4>
+                <div class="integration-role">Policy Retrieval &amp; Entitlement Boundary</div>
+              </div>
+            </div>
+            <span class="status-pill pass">LIVE ONLINE</span>
+          </div>
+          <p class="integration-text">
+            When a customer ticket questions returns, warranties, or SLAs, Relay invokes the <code>retrieve</code> tool to query Clearance's <code>POST /ask</code> endpoint using a restricted service principal.
+          </p>
+          <div class="integration-meta">
+            <div class="meta-row"><span class="meta-label">Live URL:</span> <a href="https://clearance-d6s6.onrender.com" target="_blank" class="meta-link">https://clearance-d6s6.onrender.com ↗</a></div>
+            <div class="meta-row"><span class="meta-label">Persona Role:</span> <code>compliance_analyst</code></div>
+            <div class="meta-row"><span class="meta-label">Security Gate:</span> <span>Blocks executive severance &amp; payroll</span></div>
+          </div>
+          <div class="integration-actions">
+            <button class="btn btn-secondary btn-sm" id="btn-demo-clearance">Inspect Live Policy Payload</button>
+            <a href="https://clearance-d6s6.onrender.com" target="_blank" class="btn btn-outline btn-sm">Open Clearance ↗</a>
+          </div>
+        </div>
+
+        <!-- Ledgerline Project 2 -->
+        <div class="integration-box">
+          <div class="integration-head">
+            <div class="integration-icon-title">
+              <span class="integration-icon">📑</span>
+              <div>
+                <h4>Project 2: Ledgerline</h4>
+                <div class="integration-role">Invoice Extraction &amp; Arithmetic Audit</div>
+              </div>
+            </div>
+            <span class="status-pill pass">LIVE ONLINE</span>
+          </div>
+          <p class="integration-text">
+            When a billing dispute arrives with an invoice, Relay passes the document to Ledgerline's <code>POST /api/v1/extract</code> endpoint to mathematically audit line items, subtotal, and tax.
+          </p>
+          <div class="integration-meta">
+            <div class="meta-row"><span class="meta-label">Live URL:</span> <a href="https://ledgerline-xcmg.onrender.com" target="_blank" class="meta-link">https://ledgerline-xcmg.onrender.com ↗</a></div>
+            <div class="meta-row"><span class="meta-label">Auth Header:</span> <code>X-API-Key</code></div>
+            <div class="meta-row"><span class="meta-label">Audit Invariant:</span> <span>is_mathematically_sound &amp; claim_verified</span></div>
+          </div>
+          <div class="integration-actions">
+            <button class="btn btn-secondary btn-sm" id="btn-demo-ledgerline">Inspect Invoice Audit Payload</button>
+            <a href="https://ledgerline-xcmg.onrender.com" target="_blank" class="btn btn-outline btn-sm">Open Ledgerline ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Inspection Drawer -->
+      <div class="integration-drawer" id="integration-drawer" style="display: none;">
+        <div class="drawer-header">
+          <span id="drawer-title" class="drawer-title">Live Payload Inspector</span>
+          <button class="drawer-close" id="btn-close-drawer">✕ Close</button>
+        </div>
+        <pre><code id="drawer-code" class="code-font">// Click an inspect button above to view payload</code></pre>
+      </div>
+    </section>
 
     <!-- Section 1: Precomputed Trace Viewer -->
     <section id="traces" class="section-card">

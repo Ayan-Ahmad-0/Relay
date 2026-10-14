@@ -616,3 +616,91 @@ btnResetSim.addEventListener("click", () => {
   simSinkStream.innerHTML = '<div class="log-entry">// External sink waiting for outbound effects...</div>';
   sinkStatusBadge.textContent = "DUPLICATE COUNT: 0";
 });
+
+// 4. Live Integrations Payload Inspector Drawer
+const btnDemoClearance = document.getElementById("btn-demo-clearance");
+const btnDemoLedgerline = document.getElementById("btn-demo-ledgerline");
+const btnCloseDrawer = document.getElementById("btn-close-drawer");
+const drawer = document.getElementById("integration-drawer");
+const drawerTitle = document.getElementById("drawer-title");
+const drawerCode = document.getElementById("drawer-code");
+
+if (btnDemoClearance && drawer) {
+  btnDemoClearance.addEventListener("click", () => {
+    drawer.style.display = "block";
+    drawerTitle.textContent = "🛡️ Project 1: Clearance Live Policy Tool Payload (POST /ask)";
+    const payload = {
+      project: "Project 1 (Clearance)",
+      endpoint: "https://clearance-d6s6.onrender.com/ask",
+      method: "POST",
+      headers: {
+        "Authorization": "Bearer relay-service-principal-key",
+        "Content-Type": "application/json"
+      },
+      request: {
+        persona: "compliance_analyst",
+        question: "What is the return and refund policy window for disputed orders?"
+      },
+      response: {
+        status: 200,
+        source: "live_clearance",
+        document: "return-and-refund-policy.md",
+        answer: "Items may be returned within 30 days of delivery for a full refund in original packaging.",
+        documents: ["return-and-refund-policy.md"]
+      },
+      security_boundary: {
+        status: "ENFORCED",
+        rule: "Queries containing 'executive severance' or 'payroll' raise SecurityPolicyViolation immediately in Python without network egress."
+      }
+    };
+    drawerCode.textContent = JSON.stringify(payload, null, 2);
+    drawer.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  });
+}
+
+if (btnDemoLedgerline && drawer) {
+  btnDemoLedgerline.addEventListener("click", () => {
+    drawer.style.display = "block";
+    drawerTitle.textContent = "📑 Project 2: Ledgerline Live Invoice Extraction & Math Audit (POST /api/v1/extract)";
+    const payload = {
+      project: "Project 2 (Ledgerline)",
+      endpoint: "https://ledgerline-xcmg.onrender.com/api/v1/extract",
+      method: "POST",
+      headers: {
+        "X-API-Key": "relay-ledgerline-key",
+        "Content-Type": "multipart/form-data"
+      },
+      multipart_form: {
+        file: "INV-2026-LIVE-001.pdf (application/pdf)"
+      },
+      extracted_invoice: {
+        invoice_number: "INV-2026-LIVE-001",
+        vendor: "Acme Cloud Services",
+        line_items: [
+          { description: "Pro Plan Subscription", quantity: 1, unit_price: 100.0, total: 100.0 },
+          { description: "Addon Seats (2x)", quantity: 2, unit_price: 25.0, total: 50.0 }
+        ],
+        subtotal: 150.0,
+        tax: 15.0,
+        total_amount: 165.0
+      },
+      math_audit: {
+        is_mathematically_sound: true,
+        calculated_total: 165.0,
+        customer_claimed_amount: 165.0,
+        math_delta: 0.0,
+        claim_verified: true,
+        discrepancy_explanation: "Extracted line items match invoice total exactly."
+      }
+    };
+    drawerCode.textContent = JSON.stringify(payload, null, 2);
+    drawer.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  });
+}
+
+if (btnCloseDrawer && drawer) {
+  btnCloseDrawer.addEventListener("click", () => {
+    drawer.style.display = "none";
+  });
+}
+
