@@ -1,0 +1,41 @@
+{
+  "project": "relay",
+  "audit_version": "1.0.0",
+  "evaluated_candidates": [
+    {
+      "name": "osTicket",
+      "repository": "https://github.com/osTicket/osTicket",
+      "license": "GPL-2.0",
+      "architecture": "PHP / MySQL monolithic architecture",
+      "selection_decision": "Rejected: Legacy PHP architecture does not natively provide modern JSON streaming or clean REST webhook event streams compared to Chatwoot."
+    },
+    {
+      "name": "Zammad",
+      "repository": "https://github.com/zammad/zammad",
+      "license": "AGPL-3.0",
+      "architecture": "Ruby on Rails / Elasticsearch / PostgreSQL",
+      "selection_decision": "Rejected: High baseline footprint (~4GB RAM) for development/testing environments."
+    },
+    {
+      "name": "Chatwoot",
+      "repository": "https://github.com/chatwoot/chatwoot",
+      "license": "AGPL-3.0",
+      "license_url": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/LICENSE",
+      "audit_date": "2026-10-14",
+      "architecture": "Ruby on Rails / Vue / PostgreSQL / Redis",
+      "selection_decision": "Selected: First-class REST API, webhook events for conversation lifecycles, lightweight Docker deployment, and active open-source ecosystem.",
+      "license_audit": {
+        "license_spdx": "AGPL-3.0-only",
+        "section_13_analysis": "Section 13 of AGPL-3.0 requires offering network-interacting users the source code of the modified version if modified software is run as a network service.",
+        "compliance_decision": "Relay connects strictly as an external API consumer over HTTP webhooks and REST endpoints. Any host modifications (the triage hook) are encapsulated within a minimal, self-contained hook module (<30 LoC) maintained in a local shadow/comparison harness. Relay itself is an independent service with its own license, eliminating AGPL contamination while fully complying with upstream terms."
+      }
+    }
+  ],
+  "chosen_host": {
+    "name": "Chatwoot",
+    "upstream_repository": "https://github.com/chatwoot/chatwoot",
+    "license": "AGPL-3.0",
+    "audit_date": "2026-10-14",
+    "integration_mode": "External REST API + Webhooks (Isolated Service Boundaries)"
+  }
+}

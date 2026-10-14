@@ -1,0 +1,76 @@
+name: Relay CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  preflight-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: relay
+          POSTGRES_PASSWORD: relay
+          POSTGRES_DB: relay_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+          enable-cache: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Dependencies
+        run: uv sync --extra dev
+
+      - name: Lint and Format with Ruff
+        run: |
+          uv run ruff check .
+          uv run ruff format --check .
+
+      - name: Secret Scanning with Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install dbmate
+        run: |
+          sudo curl -fsSL -o /usr/local/bin/dbmate https://github.com/amacneil/dbmate/releases/download/v2.26.0/dbmate-linux-amd64
+          sudo chmod +x /usr/local/bin/dbmate
+
+      - name: Run dbmate Migrations against PostgreSQL 16
+        env:
+          DATABASE_URL: postgres://relay:relay@localhost:5432/relay_test?sslmode=disable
+        run: |
+          if [ -d "db/migrations" ]; then
+            dbmate up
+          else
+            echo "No migrations found yet - skipping dbmate up"
+          fi
+
+      - name: Run Test Suite
+        env:
+          DATABASE_URL: postgres://relay:relay@localhost:5432/relay_test?sslmode=disable
+        run: uv run pytest --cov=relay --cov-report=term-missing

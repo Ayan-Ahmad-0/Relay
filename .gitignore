@@ -1,0 +1,60 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Testing and coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.mutmut-cache/
+
+# Linter and type checker
+.ruff_cache/
+.mypy_cache/
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Database & runtime logs
+db/schema.sql.bak
+*.log
+sink_output.log
+
+# Local binaries
+bin/
