@@ -2,16 +2,16 @@
 
 Relay is an automated, crash-resilient customer support AI agent designed to triage incoming tickets, fetch policies from Clearance (Project 1), mathematically audit invoices via Ledgerline (Project 2), and safely draft replies within host helpdesk software. It guarantees exactly zero duplicate side effects across process crashes, suspends at zero CPU cost during human approval gates, and enforces provable prompt injection safety using PostgreSQL 16 as its sole coordination primitive.
 
-![Python](https://img.shields.io/badge/Python-3.13-3776AB?style=flat)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?style=flat)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.110-009688?style=flat)
-![Pydantic](https://img.shields.io/badge/Pydantic-2.6-E92063?style=flat)
-![Ruff](https://img.shields.io/badge/Ruff-0.3-D7FF64?style=flat)
-![Pytest](https://img.shields.io/badge/Pytest-8.0-0A9EDC?style=flat)
+![Python](https://img.shields.io/badge/Python-3.13-3776AB?style=flat&logo=python&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?style=flat&logo=postgresql&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.110-009688?style=flat&logo=fastapi&logoColor=white)
+![Pydantic](https://img.shields.io/badge/Pydantic-2.6-E92063?style=flat&logo=pydantic&logoColor=white)
+![Ruff](https://img.shields.io/badge/Ruff-0.3-D7FF64?style=flat&logo=ruff&logoColor=black)
+![Pytest](https://img.shields.io/badge/Pytest-8.0-0A9EDC?style=flat&logo=pytest&logoColor=white)
 
 ---
 
-## 📋 Overview
+## Overview
 
 1. **Ingests** incoming helpdesk tickets via a non-invasive, feature-flagged host triage hook (<30 lines of code) with sub-millisecond rollback capability.
 2. **Retrieves** internal policy chunks from Clearance (Project 1) using a scoped service principal with automatic offline cache fallback.
@@ -24,7 +24,7 @@ Reliability is measured across 200 injected fault runs verifying 0 duplicate sin
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 Host Webhook (Chatwoot) ──► Relay Ingestion API ──► PostgreSQL 16 (Task Lease) ──► Worker Process
@@ -59,7 +59,7 @@ Clearance (Project 1)                  Ledgerline (Project 2)                  E
 
 ---
 
-## 📊 Trace Viewer & Live Crash Simulator
+## Trace Viewer & Live Crash Simulator
 
 <!-- Add: images/trace_viewer_overview.png -->
 ![Trace Viewer Overview](images/trace_viewer_overview.png)
@@ -69,7 +69,7 @@ Clearance (Project 1)                  Ledgerline (Project 2)                  E
 
 ---
 
-## 🔄 Pipeline Flow
+## Pipeline Flow
 
 ```
 [Incoming Support Ticket]
@@ -117,20 +117,20 @@ Every stage in Relay is fully re-runnable. If a worker terminates abruptly at an
 
 ---
 
-## ✅ Evaluation Results
+## Evaluation Results
 
 The evaluation test suite encompasses 41 unit and integration tests, 5-window chaos fault injection runs, 90 adversarial prompt injection attacks, 8-worker lock contention stress tests, and automated AST mutation testing.
 
 | Evaluation Metric | Observed Result | Specification Standard | Status |
 | :--- | :--- | :--- | :--- |
-| **Crash Recovery Duplicate Effects** | **0 duplicates** | Exactly 0 across 5 crash windows | ✅ PASS |
-| **Deterministic Replay Divergence** | **0 divergence** (9.6 µs) | 0 divergence on recorded replay | ✅ PASS |
-| **Adversarial Injection Side Effects** | **0 unapproved effects** | Exactly 0 unauthorized outbound writes | ✅ PASS |
-| **Inverted Contention Terminal Rate** | **100.0%** (56.3 runs/s) | 100% terminal resolution | ✅ PASS |
-| **Serialization Failure Rate** | **0 permanent errors** | Clean exponential retry on code 40001 | ✅ PASS |
-| **Host Hook Rollback Latency** | **< 0.08 ms** | Sub-millisecond fallback | ✅ PASS |
-| **Cost Metering Reconciliation** | **10¢ delta bound** | Exact tracking of `billed-unknown` | ✅ PASS |
-| **AST Mutation Kill Rate** | **100.0%** (7/7 killed) | >= 80.0% mutant kill rate | ✅ PASS |
+| **Crash Recovery Duplicate Effects** | **0 duplicates** | Exactly 0 across 5 crash windows | PASS |
+| **Deterministic Replay Divergence** | **0 divergence** (9.6 µs) | 0 divergence on recorded replay | PASS |
+| **Adversarial Injection Side Effects** | **0 unapproved effects** | Exactly 0 unauthorized outbound writes | PASS |
+| **Inverted Contention Terminal Rate** | **100.0%** (56.3 runs/s) | 100% terminal resolution | PASS |
+| **Serialization Failure Rate** | **0 permanent errors** | Clean exponential retry on code 40001 | PASS |
+| **Host Hook Rollback Latency** | **< 0.08 ms** | Sub-millisecond fallback | PASS |
+| **Cost Metering Reconciliation** | **10¢ delta bound** | Exact tracking of `billed-unknown` | PASS |
+| **AST Mutation Kill Rate** | **100.0%** (7/7 killed) | >= 80.0% mutant kill rate | PASS |
 
 <!-- Add: images/evaluation_report.png -->
 ![Evaluation Report](images/evaluation_report.png)
@@ -141,7 +141,7 @@ During initial crash resilience testing at Window 2 (`after_effect_before_commit
 
 ---
 
-## 🗂️ PostgreSQL 16 Coordination Store
+## PostgreSQL 16 Coordination Store
 
 | Object | Description |
 | :--- | :--- |
@@ -156,7 +156,7 @@ During initial crash resilience testing at Window 2 (`after_effect_before_commit
 
 ---
 
-## 🔒 Reliability & Key Design Decisions
+## Reliability & Key Design Decisions
 
 - **PostgreSQL 16 as Sole Coordinator** — eliminates external dependencies (Kafka, Redis, Celery) by using transactional row locks (`SKIP LOCKED`) and ACID consistency.
 - **Incrementing Fencing Tokens** — every run claim increments a `claim_epoch` counter; step commits conditional on this token reject writes from zombie workers.
@@ -167,7 +167,7 @@ During initial crash resilience testing at Window 2 (`after_effect_before_commit
 
 ---
 
-## 📁 Repository Structure
+## Repository Structure
 
 ```
 Relay/
@@ -228,7 +228,7 @@ Relay/
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
 Copy `.env.example` to `.env` to configure Relay:
 
@@ -262,7 +262,7 @@ LEASE_DURATION_SECONDS=10
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 Follow these steps to set up, build, evaluate, and run Relay locally:
 
@@ -300,7 +300,7 @@ uv run python -m relay.worker --worker-id worker-1
 
 ---
 
-## 🚧 Challenges Solved
+## Challenges Solved
 
 - **Duplicate Outbound Actions on Crash** — *Symptom:* Worker killed after executing an HTTP action resulted in the recovery worker duplicating the customer reply. *Diagnosis:* Worker crashed before committing the transaction updating effect status from `pending` to `applied`. *Fix:* Implemented two-phase active reconciliation where recovery workers query the external sink before re-issuing calls, skipping execution if the idempotency key already exists.
 - **Zombie Worker State Overwrites** — *Symptom:* Stale workers resuming from long garbage collection pauses overwrote completed steps. *Diagnosis:* Workers lacked a monotonically increasing epoch token validated at the transaction boundary. *Fix:* Implemented `claim_epoch` fencing tokens on the `runs` and `leases` tables; every step commit requires `claim_epoch == expected_epoch`, immediately failing stale workers with `FencingTokenError`.
@@ -310,7 +310,7 @@ uv run python -m relay.worker --worker-id worker-1
 
 ---
 
-## 🛠️ Future Improvements
+## Future Improvements
 
 - **PostgreSQL Logical Replication Sidecar** — stream completed run events directly to an S3/MinIO bucket as Parquet files for long-term analytics without taxing operational OLTP throughput.
 - **eBPF-Based Network Egress Sandbox** — enhance subprocess tool security with Linux kernel eBPF probes enforcing strict egress filtering at the packet level.
