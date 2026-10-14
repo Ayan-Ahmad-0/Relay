@@ -55,7 +55,7 @@ Thumbs.db
 db/schema.sql.bak
 *.log
 sink_output.log
-
-# Local binaries
+# Local binaries and cache
 bin/
+cache/
 info.md
