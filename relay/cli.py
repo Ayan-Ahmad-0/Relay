@@ -24,6 +24,15 @@ def main(args: list[str] | None = None) -> None:
         parser.print_help()
         sys.exit(0)
 
+    if parsed_args.command == "sink":
+        from relay.sink import run_service
+
+        run_service()
+    elif parsed_args.command == "worker":
+        from relay.worker import run_worker
+
+        run_worker()
+
 
 if __name__ == "__main__":
     main()
