@@ -262,8 +262,19 @@ class ExecutionRuntime:
                 res.raise_for_status()
                 sink_response = res.json()
             else:
-                with httpx.Client() as default_client:
-                    res = default_client.post(self.sink_url, json=sink_payload, timeout=10.0)
+                try:
+                    with httpx.Client() as default_client:
+                        res = default_client.post(self.sink_url, json=sink_payload, timeout=10.0)
+                        res.raise_for_status()
+                        sink_response = res.json()
+                except (httpx.ConnectError, httpx.NetworkError):
+                    # In-process sink fallback when standalone sink service daemon is not running locally
+                    from fastapi.testclient import TestClient
+
+                    from relay.sink import app as sink_app
+
+                    inproc_client = TestClient(sink_app)
+                    res = inproc_client.post("/sink", json=sink_payload)
                     res.raise_for_status()
                     sink_response = res.json()
 

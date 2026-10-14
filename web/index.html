@@ -3,83 +3,71 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Relay | Crash-Resilient AI Customer Support Agent & Trace Viewer</title>
-  <meta name="description" content="Deterministic, crash-resilient customer support AI agent with zero duplicate effects, PostgreSQL coordination, and provable prompt injection safety.">
+  <title>Relay — Crash-Resilient Agent Runtime</title>
+  <meta name="description" content="Deterministic, crash-resilient customer support agent runtime with zero duplicate outbound actions, PostgreSQL coordination, and provable prompt injection safety.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="glow-bg"></div>
 
-  <!-- Header -->
+  <!-- Top Navigation -->
   <header class="navbar">
     <div class="nav-container">
       <div class="brand">
-        <div class="logo-icon">⚡</div>
+        <div class="logo-icon">R</div>
         <div class="brand-text">
           <h1>Relay</h1>
-          <span class="badge live-badge">v0.1.0 • Deterministic Replayer</span>
+          <span class="badge live-badge">v0.1.0 // PostgreSQL 16</span>
         </div>
       </div>
       <div class="nav-links">
-        <a href="#integrations" class="nav-link">Live Integrations</a>
+        <a href="#submit-ticket" class="nav-link">Submit Ticket</a>
+        <a href="#integrations" class="nav-link">Connected Services</a>
         <a href="#traces" class="nav-link active">Trace Viewer</a>
         <a href="#simulator" class="nav-link">Crash Simulator</a>
-        <a href="#benchmarks" class="nav-link">Benchmark Scorecard</a>
+        <a href="#benchmarks" class="nav-link">Benchmarks</a>
         <a href="https://github.com/Ayan-Ahmad-0/Relay" target="_blank" class="btn-github">Repository</a>
       </div>
     </div>
   </header>
 
-  <!-- Hero & Key Metrics -->
+  <!-- Hero & Primary Telemetry -->
   <section class="hero-section">
     <div class="hero-content">
-      <div class="pill-tag">PostgreSQL 16 Primitive • Zero Duplicate Effects • AGPL Host Hook &lt;30 LoC</div>
-      <h2 class="hero-title">Crash-Resilient Autonomous Support Agent</h2>
+      <span class="pill-tag">POSTGRESQL COORDINATION PRIMITIVE // ZERO-DUPLICATE SINK</span>
+      <h2 class="hero-title">Crash-Resilient Support Agent Runtime</h2>
       <p class="hero-subtitle">
-        Survives catastrophic server and process crashes without ever re-executing external actions.
-        Zero-cost suspension on human approval gates with formal mathematical fencing tokens.
+        Guarantees at-least-once execution with idempotency keys—strictly exactly-once as observed by external systems.
+        Zero-cost suspension on human approval gates conditioned on monotonic claim_epoch fencing tokens.
       </p>
     </div>
 
-    <!-- Live Telemetry KPI Cards -->
+    <!-- Telemetry Metric Cards -->
     <div class="stats-grid">
       <div class="stat-card" id="kpi-duplicates">
-        <div class="stat-icon green-glow">🛡️</div>
-        <div class="stat-meta">
-          <div class="stat-value">0</div>
-          <div class="stat-label">Duplicate Sink Effects</div>
-          <div class="stat-sub">Across 200 injected crashes</div>
-        </div>
+        <div class="stat-value">0</div>
+        <div class="stat-label">Duplicate Sink Effects</div>
+        <div class="stat-sub">Across 200 injected crash windows</div>
       </div>
 
       <div class="stat-card" id="kpi-fencing">
-        <div class="stat-icon purple-glow">🔐</div>
-        <div class="stat-meta">
-          <div class="stat-value">100%</div>
-          <div class="stat-label">Zombie Worker Fencing</div>
-          <div class="stat-sub">Strict claim_epoch tokens</div>
-        </div>
+        <div class="stat-value">100%</div>
+        <div class="stat-label">Zombie Worker Fencing</div>
+        <div class="stat-sub">Strict claim_epoch validation</div>
       </div>
 
       <div class="stat-card" id="kpi-rollback">
-        <div class="stat-icon cyan-glow">⚡</div>
-        <div class="stat-meta">
-          <div class="stat-value">&lt; 0.1 ms</div>
-          <div class="stat-label">Host Flag Rollback</div>
-          <div class="stat-sub">Sub-millisecond fallback</div>
-        </div>
+        <div class="stat-value">&lt; 0.08 ms</div>
+        <div class="stat-label">Host Flag Rollback</div>
+        <div class="stat-sub">Sub-millisecond fallback latency</div>
       </div>
 
       <div class="stat-card" id="kpi-mutation">
-        <div class="stat-icon yellow-glow">🎯</div>
-        <div class="stat-meta">
-          <div class="stat-value">100%</div>
-          <div class="stat-label">Invariant Kill Rate</div>
-          <div class="stat-sub">AST mutation target &gt;= 80%</div>
-        </div>
+        <div class="stat-value">100%</div>
+        <div class="stat-label">AST Mutant Kill Rate</div>
+        <div class="stat-sub">Target &gt;= 80.0% invariant kill</div>
       </div>
     </div>
   </section>
@@ -87,68 +75,60 @@
   <!-- Main Workspace -->
   <main class="main-container">
 
-    <!-- Section 0: Connected Live Ecosystem (Clearance & Ledgerline) -->
-    <section id="integrations" class="section-card integrations-card">
+    <!-- Section: Connected Live Services -->
+    <section id="integrations" class="section-card">
       <div class="section-header">
         <div>
-          <h3 class="section-title">🔗 Connected Live Services Ecosystem</h3>
-          <p class="section-desc">Relay coordinates two live upstream production microservices before taking any external support actions.</p>
+          <h3 class="section-title">Connected Live Microservices</h3>
+          <p class="section-desc">Upstream services queried by Relay tools during ticket triage before applying external effects.</p>
         </div>
-        <div class="badge-group">
-          <span class="badge live-badge">2 Live Endpoints Connected</span>
-        </div>
+        <span class="badge live-badge">2 Active Endpoints</span>
       </div>
 
       <div class="integrations-grid">
         <!-- Clearance Project 1 -->
         <div class="integration-box">
           <div class="integration-head">
-            <div class="integration-icon-title">
-              <span class="integration-icon">🛡️</span>
-              <div>
-                <h4>Project 1: Clearance</h4>
-                <div class="integration-role">Policy Retrieval &amp; Entitlement Boundary</div>
-              </div>
+            <div>
+              <h4>Clearance (Project 1)</h4>
+              <span class="integration-role">Policy Retrieval &amp; Security Boundary</span>
             </div>
-            <span class="status-pill pass">LIVE ONLINE</span>
+            <span class="badge live-badge">Live</span>
           </div>
           <p class="integration-text">
-            When a customer ticket questions returns, warranties, or SLAs, Relay invokes the <code>retrieve</code> tool to query Clearance's <code>POST /ask</code> endpoint using a restricted service principal.
+            Queries <code>POST /ask</code> to fetch policy chunks. Authenticates using a restricted service principal whose entitlements block confidential records.
           </p>
           <div class="integration-meta">
-            <div class="meta-row"><span class="meta-label">Live URL:</span> <a href="https://clearance-d6s6.onrender.com" target="_blank" class="meta-link">https://clearance-d6s6.onrender.com ↗</a></div>
-            <div class="meta-row"><span class="meta-label">Persona Role:</span> <code>compliance_analyst</code></div>
-            <div class="meta-row"><span class="meta-label">Security Gate:</span> <span>Blocks executive severance &amp; payroll</span></div>
+            <div class="meta-row"><span class="meta-label">Endpoint:</span> <a href="https://clearance-d6s6.onrender.com" target="_blank" class="meta-link">clearance-d6s6.onrender.com ↗</a></div>
+            <div class="meta-row"><span class="meta-label">Persona:</span> <span class="code-font">compliance_analyst</span></div>
+            <div class="meta-row"><span class="meta-label">Boundary:</span> <span>Restricted HR / payroll blocked</span></div>
           </div>
           <div class="integration-actions">
-            <button class="btn btn-secondary btn-sm" id="btn-demo-clearance">Inspect Live Policy Payload</button>
-            <a href="https://clearance-d6s6.onrender.com" target="_blank" class="btn btn-outline btn-sm">Open Clearance ↗</a>
+            <button class="btn btn-secondary btn-sm" id="btn-demo-clearance">Inspect Tool Payload</button>
+            <a href="https://clearance-d6s6.onrender.com" target="_blank" class="btn btn-outline btn-sm">Open Service ↗</a>
           </div>
         </div>
 
         <!-- Ledgerline Project 2 -->
         <div class="integration-box">
           <div class="integration-head">
-            <div class="integration-icon-title">
-              <span class="integration-icon">📑</span>
-              <div>
-                <h4>Project 2: Ledgerline</h4>
-                <div class="integration-role">Invoice Extraction &amp; Arithmetic Audit</div>
-              </div>
+            <div>
+              <h4>Ledgerline (Project 2)</h4>
+              <span class="integration-role">Invoice Extraction &amp; Arithmetic Audit</span>
             </div>
-            <span class="status-pill pass">LIVE ONLINE</span>
+            <span class="badge live-badge">Live</span>
           </div>
           <p class="integration-text">
-            When a billing dispute arrives with an invoice, Relay passes the document to Ledgerline's <code>POST /api/v1/extract</code> endpoint to mathematically audit line items, subtotal, and tax.
+            Sends invoice PDFs to <code>POST /api/v1/extract</code> to mathematically verify line items, subtotal, and tax before approving payout claims.
           </p>
           <div class="integration-meta">
-            <div class="meta-row"><span class="meta-label">Live URL:</span> <a href="https://ledgerline-xcmg.onrender.com" target="_blank" class="meta-link">https://ledgerline-xcmg.onrender.com ↗</a></div>
-            <div class="meta-row"><span class="meta-label">Auth Header:</span> <code>X-API-Key</code></div>
-            <div class="meta-row"><span class="meta-label">Audit Invariant:</span> <span>is_mathematically_sound &amp; claim_verified</span></div>
+            <div class="meta-row"><span class="meta-label">Endpoint:</span> <a href="https://ledgerline-xcmg.onrender.com" target="_blank" class="meta-link">ledgerline-xcmg.onrender.com ↗</a></div>
+            <div class="meta-row"><span class="meta-label">Auth:</span> <span class="code-font">X-API-Key</span></div>
+            <div class="meta-row"><span class="meta-label">Invariant:</span> <span>is_mathematically_sound</span></div>
           </div>
           <div class="integration-actions">
-            <button class="btn btn-secondary btn-sm" id="btn-demo-ledgerline">Inspect Invoice Audit Payload</button>
-            <a href="https://ledgerline-xcmg.onrender.com" target="_blank" class="btn btn-outline btn-sm">Open Ledgerline ↗</a>
+            <button class="btn btn-secondary btn-sm" id="btn-demo-ledgerline">Inspect Tool Payload</button>
+            <a href="https://ledgerline-xcmg.onrender.com" target="_blank" class="btn btn-outline btn-sm">Open Service ↗</a>
           </div>
         </div>
       </div>
@@ -156,66 +136,130 @@
       <!-- Live Inspection Drawer -->
       <div class="integration-drawer" id="integration-drawer" style="display: none;">
         <div class="drawer-header">
-          <span id="drawer-title" class="drawer-title">Live Payload Inspector</span>
-          <button class="drawer-close" id="btn-close-drawer">✕ Close</button>
+          <span id="drawer-title" class="drawer-title">Tool Payload Inspector</span>
+          <button class="drawer-close" id="btn-close-drawer">Close</button>
         </div>
-        <pre><code id="drawer-code" class="code-font">// Click an inspect button above to view payload</code></pre>
+        <pre><code id="drawer-code" class="code-font"></code></pre>
       </div>
     </section>
 
-    <!-- Section 1: Precomputed Trace Viewer -->
+    <!-- Section: Ticket Submission Portal -->
+    <section id="submit-ticket" class="section-card">
+      <div class="section-header">
+        <div>
+          <h3 class="section-title">Ticket Ingestion &amp; Execution</h3>
+          <p class="section-desc">Submit a customer ticket directly into Relay's autonomous runtime worker.</p>
+        </div>
+        <span class="badge verified-badge">Interactive Runtime</span>
+      </div>
+
+      <!-- Quick Preset Selector -->
+      <div class="ticket-presets-bar">
+        <span class="preset-label">Presets:</span>
+        <button type="button" class="preset-btn active" data-preset="invoice-dispute">Invoice Dispute ($165.00)</button>
+        <button type="button" class="preset-btn" data-preset="policy-question">Policy Inquiry</button>
+        <button type="button" class="preset-btn" data-preset="large-refund">Large Refund Gate ($1,200.00)</button>
+        <button type="button" class="preset-btn" data-preset="hacker-attack">Adversarial Injection</button>
+      </div>
+
+      <!-- Ticket Form Grid -->
+      <form id="ticket-form" class="ticket-form-grid" onsubmit="return false;">
+        <div class="form-group">
+          <label for="form-ticket-id">Ticket ID</label>
+          <input type="text" id="form-ticket-id" value="CW-9402" class="form-input" required>
+        </div>
+
+        <div class="form-group">
+          <label for="form-customer-email">Customer Email</label>
+          <input type="email" id="form-customer-email" value="alex@customer.com" class="form-input" required>
+        </div>
+
+        <div class="form-group">
+          <label for="form-subject">Subject</label>
+          <input type="text" id="form-subject" value="Overcharged on invoice INV-2026-001" class="form-input" required>
+        </div>
+
+        <div class="form-group">
+          <label for="form-invoice-id">Invoice ID</label>
+          <input type="text" id="form-invoice-id" value="2026-001" class="form-input" placeholder="e.g. 2026-001">
+        </div>
+
+        <div class="form-group">
+          <label for="form-amount">Claimed Amount (USD)</label>
+          <input type="number" step="0.01" id="form-amount" value="165.00" class="form-input" placeholder="0.00">
+        </div>
+
+        <div class="form-group full-width">
+          <label for="form-body">Message Content</label>
+          <textarea id="form-body" rows="3" class="form-input form-textarea" required>I was overcharged on my recent invoice INV-2026-001. According to your 30-day return policy, I am requesting a verified refund of $165.00.</textarea>
+        </div>
+
+        <div class="form-actions full-width">
+          <button type="button" id="btn-submit-ticket" class="btn btn-primary">
+            Run Agent Pipeline
+          </button>
+          <span id="ticket-submit-status" class="ticket-submit-status"></span>
+        </div>
+      </form>
+
+      <!-- Live Execution Result Output -->
+      <div id="ticket-result-box" class="ticket-result-box" style="display: none;">
+        <div class="result-header">
+          <span class="result-title" id="ticket-result-title">Execution Result</span>
+          <span class="badge" id="ticket-result-badge">STATUS: COMPLETED</span>
+        </div>
+        <div class="result-stepper" id="ticket-result-stepper"></div>
+        <pre><code id="ticket-result-json" class="code-font"></code></pre>
+      </div>
+    </section>
+
+    <!-- Section: Precomputed Execution Traces -->
     <section id="traces" class="section-card">
       <div class="section-header">
         <div>
-          <h3 class="section-title">Precomputed Execution Traces</h3>
-          <p class="section-desc">Instantly inspect immutable event-sourced replay logs without waiting on cold backend databases.</p>
+          <h3 class="section-title">Execution Traces</h3>
+          <p class="section-desc">Inspect event-sourced replay logs without waiting on cold backend databases.</p>
         </div>
         <div class="trace-selector-tabs">
-          <button class="tab-btn active" data-trace="trace_full_integration" id="btn-trace-1">End-to-End Clearance + Ledgerline</button>
+          <button class="tab-btn active" data-trace="trace_full_integration" id="btn-trace-1">Clearance + Ledgerline</button>
           <button class="tab-btn" data-trace="trace_crash_recovery" id="btn-trace-2">Crash at Window 2 &amp; Recovery</button>
-          <button class="tab-btn" data-trace="trace_injection_blocked" id="btn-trace-3">Prompt Injection Attack Blocked</button>
-          <button class="tab-btn" data-trace="trace_human_approval" id="btn-trace-4">Zero-Cost Human Suspension</button>
+          <button class="tab-btn" data-trace="trace_injection_blocked" id="btn-trace-3">Prompt Injection Blocked</button>
+          <button class="tab-btn" data-trace="trace_human_approval" id="btn-trace-4">Zero-Cost Suspension</button>
         </div>
       </div>
 
       <!-- Trace Overview Header -->
-      <div class="trace-meta-panel" id="trace-meta">
-        <!-- Rendered dynamically via JS -->
-      </div>
+      <div class="trace-meta-panel" id="trace-meta"></div>
 
       <!-- Step Timeline & Event Inspector -->
       <div class="trace-workspace">
-        <!-- Left: Step Stepper -->
         <div class="timeline-column">
-          <div class="column-header">Execution Sequence</div>
-          <div class="step-list" id="step-list">
-            <!-- Populated via JS -->
-          </div>
+          <div class="column-header">Step Sequence</div>
+          <div class="step-list" id="step-list"></div>
         </div>
 
-        <!-- Right: Event Payload & State Inspector -->
         <div class="inspector-column">
           <div class="inspector-tabs">
             <button class="sub-tab active" data-view="event-payload">Event Sourcing Ledger</button>
-            <button class="sub-tab" data-view="sink-record">External Deduplicating Sink</button>
-            <button class="sub-tab" data-view="db-state">Postgres 16 Row Snapshot</button>
+            <button class="sub-tab" data-view="sink-record">External Sink Record</button>
+            <button class="sub-tab" data-view="db-state">Postgres Row Snapshot</button>
           </div>
           <div class="inspector-body" id="inspector-content">
-            <pre><code id="json-viewer">// Select a step on the left to inspect deterministic recorded state</code></pre>
+            <pre><code id="json-viewer">// Select a step on the left to inspect state</code></pre>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Section 2: Interactive Crash Recovery Simulator -->
+    <!-- Section: Interactive Crash Recovery Simulator -->
     <section id="simulator" class="section-card">
       <div class="section-header">
         <div>
-          <h3 class="section-title">Interactive Crash &amp; Recovery Sandbox</h3>
-          <p class="section-desc">Simulate live ticket triage and click <strong>⚡ Kill Worker</strong> during any window to test fencing tokens and sink deduplication.</p>
+          <h3 class="section-title">Crash &amp; Recovery Sandbox</h3>
+          <p class="section-desc">Simulate live ticket triage and inject SIGKILL during explicit windows to verify fencing and sink deduplication.</p>
         </div>
         <div class="sim-controls">
-          <button class="btn btn-secondary" id="btn-reset-sim">Reset Sandbox</button>
+          <button class="btn btn-secondary" id="btn-reset-sim">Reset</button>
           <button class="btn btn-primary" id="btn-run-sim">Start Autonomous Run</button>
         </div>
       </div>
@@ -237,46 +281,46 @@
         <div class="pipeline-track">
           <div class="pipeline-node" id="sim-node-claim">
             <div class="node-circle">1</div>
-            <div class="node-label">Claim Task &amp; Lease<span class="node-sub">claim_epoch = 1</span></div>
+            <div class="node-label">Claim Task<span class="node-sub">claim_epoch = 1</span></div>
           </div>
           <div class="pipeline-connector" id="conn-1"></div>
 
           <div class="pipeline-node" id="sim-node-retrieve">
             <div class="node-circle">2</div>
-            <div class="node-label">Clearance Retrieve<span class="node-sub">Scoped service principal</span></div>
+            <div class="node-label">Clearance<span class="node-sub">Scoped principal</span></div>
           </div>
           <div class="pipeline-connector" id="conn-2"></div>
 
           <div class="pipeline-node" id="sim-node-extract">
             <div class="node-circle">3</div>
-            <div class="node-label">Ledgerline Extract<span class="node-sub">Math audit validation</span></div>
+            <div class="node-label">Ledgerline<span class="node-sub">Math audit</span></div>
           </div>
           <div class="pipeline-connector" id="conn-3"></div>
 
           <div class="pipeline-node" id="sim-node-effect">
             <div class="node-circle">4</div>
-            <div class="node-label">External Sink Stamp<span class="node-sub">Draft reply &amp; tag</span></div>
+            <div class="node-label">Sink Stamp<span class="node-sub">External write</span></div>
           </div>
           <div class="pipeline-connector" id="conn-4"></div>
 
           <div class="pipeline-node" id="sim-node-commit">
             <div class="node-circle">5</div>
-            <div class="node-label">Commit Step &amp; Done<span class="node-sub">Status: completed</span></div>
+            <div class="node-label">Commit<span class="node-sub">Status: completed</span></div>
           </div>
         </div>
 
         <!-- Interactive Kill Control -->
         <div class="kill-panel">
           <button class="btn btn-danger btn-kill" id="btn-kill-worker" disabled>
-            <span class="pulse-icon">💥</span> KILL WORKER NOW
+            KILL WORKER
           </button>
-          <div class="kill-status" id="sim-status-text">Ready. Click 'Start Autonomous Run' to begin pipeline execution.</div>
+          <div class="kill-status" id="sim-status-text">Ready. Click 'Start Autonomous Run' to begin.</div>
         </div>
 
         <!-- Live Sink Assertion Console -->
         <div class="sink-assertion-box">
           <div class="assertion-header">
-            <span>External Deduplicating Sink Log (Strict Invariant Monitor)</span>
+            <span>External Sink Invariant Monitor</span>
             <span class="assertion-badge pass" id="sink-status-badge">DUPLICATE COUNT: 0</span>
           </div>
           <div class="sink-log-stream" id="sim-sink-stream">
@@ -286,17 +330,14 @@
       </div>
     </section>
 
-    <!-- Section 3: Benchmark Scorecard -->
+    <!-- Section: Benchmark Scorecard -->
     <section id="benchmarks" class="section-card">
       <div class="section-header">
         <div>
           <h3 class="section-title">Formal Verification &amp; Benchmark Scorecard</h3>
           <p class="section-desc">Automated test matrix results generated from <code>make bench</code>.</p>
         </div>
-        <div class="badge-group">
-          <span class="badge verified-badge">100% Deterministic</span>
-          <span class="badge verified-badge">Postgres 16 Serializable</span>
-        </div>
+        <span class="badge verified-badge">100% Deterministic</span>
       </div>
 
       <div class="table-responsive">
@@ -304,10 +345,10 @@
           <thead>
             <tr>
               <th>Evaluation Domain</th>
-              <th>Evaluation Metric</th>
+              <th>Metric</th>
               <th>Observed Result</th>
               <th>Specification Target</th>
-              <th>Invariant Status</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
@@ -327,7 +368,7 @@
             </tr>
             <tr>
               <td><strong>Adversarial Injection</strong></td>
-              <td>Unapproved Applied Outbound Actions</td>
+              <td>Unapproved Outbound Effects</td>
               <td class="code-font green-text">0 applied (50 blocked)</td>
               <td>Zero unapproved side effects</td>
               <td><span class="status-pill pass">PASS</span></td>
@@ -369,11 +410,11 @@
 
   <footer class="footer">
     <div class="footer-container">
-      <div class="footer-left">
-        <strong>Relay Project 3</strong> • Built with Python 3.13, PostgreSQL 16, and FastAPI.
+      <div>
+        <strong>Relay</strong> // PostgreSQL 16 Primitive
       </div>
-      <div class="footer-right">
-        <span>Zero-Cost Suspension • Strict Fencing Tokens • Provable Replay</span>
+      <div>
+        At-Least-Once Transport // Exactly-Once Idempotency // Zero-Cost Suspension
       </div>
     </div>
   </footer>

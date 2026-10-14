@@ -6,9 +6,11 @@ Queries:
 """
 
 import os
+
 import httpx
-from relay.tools.retrieve import ClearanceClient
+
 from relay.tools.extract import LedgerlineClient
+from relay.tools.retrieve import ClearanceClient
 
 
 def verify_clearance_live():
