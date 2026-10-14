@@ -211,6 +211,9 @@ Relay/
 │   │   └── runner.py                # Isolated subprocess execution runner with enforced timeouts
 │   └── worker.py                    # Worker polling loop claiming tasks and executing steps
 ├── scripts/
+│   ├── create_break_it_branches.py  # Git automation generating branches for sabotage verification
+│   ├── pinger.py                    # Keep-alive heartbeat pinger for hosted deployments
+│   ├── verify_live_endpoints.py     # Live verifier for Project 1 (Clearance) & Project 2 (Ledgerline)
 │   └── verify_sabotage.py           # Automated break-it sabotage test runner verifying red failures
 ├── tests/                           # Comprehensive test suite covering all modules and edge cases
 ├── web/
@@ -241,9 +244,11 @@ CHATWOOT_BASE_URL=http://localhost:3000
 CHATWOOT_API_TOKEN=your_chatwoot_api_token
 RELAY_FEATURE_FLAG=false
 
-# Upstream Live Services
-CLEARANCE_API_URL=http://localhost:8002
-LEDGERLINE_API_URL=http://localhost:8003
+# Upstream Live Services (Clearance & Ledgerline)
+CLEARANCE_URL=https://clearance-d6s6.onrender.com
+CLEARANCE_PERSONA=compliance_analyst
+LEDGERLINE_URL=https://ledgerline-xcmg.onrender.com
+LEDGERLINE_API_KEY=your_ledgerline_api_key
 
 # Worker Concurrency Settings
 WORKER_CONCURRENCY=4

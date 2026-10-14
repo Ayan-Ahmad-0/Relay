@@ -47,7 +47,7 @@ class LedgerlineClient:
         self,
         base_url: str | None = None,
         api_key: str | None = None,
-        timeout: float = 5.0,
+        timeout: float = 15.0,
     ) -> None:
         self.base_url = (base_url or os.getenv("LEDGERLINE_URL", DEFAULT_LEDGERLINE_URL)).rstrip(
             "/"
@@ -60,20 +60,27 @@ class LedgerlineClient:
         validate_network_egress(self.base_url, {self.base_url})
 
         try:
-            headers = {"Authorization": f"Bearer {self.api_key}"}
+            headers = {
+                "Authorization": f"Bearer {self.api_key}",
+                "X-API-Key": self.api_key,
+            }
             with httpx.Client(timeout=self.timeout) as client:
                 files = {
                     "file": (
                         f"{invoice_id}.pdf",
-                        document_bytes or b"%PDF-dummy",
+                        document_bytes or b"%PDF-1.4 sample invoice content",
                         "application/pdf",
                     )
                 }
-                res = client.post(f"{self.base_url}/extract", files=files, headers=headers)
+                # Try standard v1 route then fallback route
+                res = client.post(f"{self.base_url}/api/v1/extract", files=files, headers=headers)
+                if res.status_code == 404:
+                    res = client.post(f"{self.base_url}/extract", files=files, headers=headers)
+
                 if res.status_code == 200:
                     data = res.json()
                     return ExtractedInvoice(**data)
-        except (httpx.ConnectError, httpx.TimeoutException, httpx.NetworkError):
+        except Exception:
             pass
 
         # Deterministic offline fixture fallback

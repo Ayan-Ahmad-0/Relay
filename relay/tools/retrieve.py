@@ -54,7 +54,7 @@ class ClearanceClient:
         self,
         base_url: str | None = None,
         api_key: str | None = None,
-        timeout: float = 5.0,
+        timeout: float = 15.0,
     ) -> None:
         self.base_url = (base_url or os.getenv("CLEARANCE_URL", DEFAULT_CLEARANCE_URL)).rstrip("/")
         self.api_key = api_key or os.getenv("CLEARANCE_API_KEY", "relay-service-principal-key")
@@ -86,20 +86,41 @@ class ClearanceClient:
 
         # Attempt live API call to Project 1 (Clearance)
         try:
+            persona = os.getenv("CLEARANCE_PERSONA", "compliance_analyst")
             headers = {
                 "Authorization": f"Bearer {self.api_key}",
                 "Content-Type": "application/json",
             }
-            payload = {"query": query, "document_hint": document_hint}
+            # Clearance Project 1 live endpoint: POST /ask with persona and question
             with httpx.Client(timeout=self.timeout) as client:
-                res = client.post(f"{self.base_url}/retrieve", json=payload, headers=headers)
+                # 1. Try Clearance /ask endpoint
+                ask_payload = {"persona": persona, "question": query[:290]}
+                res = client.post(f"{self.base_url}/ask", json=ask_payload, headers=headers)
+                if res.status_code == 200:
+                    data = res.json()
+                    docs = data.get("documents", [])
+                    return {
+                        "source": "live_clearance",
+                        "document": docs[0] if docs else "return_policy",
+                        "title": "Clearance Live Knowledge Policy",
+                        "chunks": [data.get("answer", "")],
+                        "documents": docs,
+                    }
+                # 2. Try generic /retrieve endpoint
+                res = client.post(
+                    f"{self.base_url}/retrieve",
+                    json={"query": query, "document_hint": document_hint},
+                    headers=headers,
+                )
                 if res.status_code == 200:
                     return res.json()
                 if res.status_code == 403:
                     raise SecurityPolicyViolation(
                         "Clearance API: Service principal unauthorized to view requested policy"
                     )
-        except (httpx.ConnectError, httpx.TimeoutException, httpx.NetworkError):
+        except SecurityPolicyViolation:
+            raise
+        except Exception:
             # Fall back cleanly to disk cache
             pass
 
