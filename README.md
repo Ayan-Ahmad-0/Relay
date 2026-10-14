@@ -2,12 +2,12 @@
 
 Relay is an automated, crash-resilient customer support AI agent designed to triage incoming tickets, fetch policies from Clearance (Project 1), mathematically audit invoices via Ledgerline (Project 2), and safely draft replies within host helpdesk software. It guarantees exactly zero duplicate side effects across process crashes, suspends at zero CPU cost during human approval gates, and enforces provable prompt injection safety using PostgreSQL 16 as its sole coordination primitive.
 
-![Python](https://img.shields.io/badge/Python-3.13-3776AB?style=flat&logo=python&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?style=flat&logo=postgresql&logoColor=white)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.110-009688?style=flat&logo=fastapi&logoColor=white)
-![Pydantic](https://img.shields.io/badge/Pydantic-2.6-E92063?style=flat&logo=pydantic&logoColor=white)
-![Ruff](https://img.shields.io/badge/Ruff-0.3-D7FF64?style=flat&logo=ruff&logoColor=black)
-![Pytest](https://img.shields.io/badge/Pytest-8.0-0A9EDC?style=flat&logo=pytest&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.13-3776AB?style=flat)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?style=flat)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.110-009688?style=flat)
+![Pydantic](https://img.shields.io/badge/Pydantic-2.6-E92063?style=flat)
+![Ruff](https://img.shields.io/badge/Ruff-0.3-D7FF64?style=flat)
+![Pytest](https://img.shields.io/badge/Pytest-8.0-0A9EDC?style=flat)
 
 ---
 
