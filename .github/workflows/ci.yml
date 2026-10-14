@@ -9,6 +9,8 @@ on:
 jobs:
   preflight-and-test:
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgres://relay:relay@localhost:5432/relay_test?sslmode=disable
 
     services:
       postgres:
@@ -76,6 +78,8 @@ jobs:
         run: uv run pytest --cov=relay --cov-report=term-missing
 
       - name: Verify Break-It Sabotages (Turn RED on Invariant Violation)
+        env:
+          DATABASE_URL: postgres://relay:relay@localhost:5432/relay_test?sslmode=disable
         run: uv run python scripts/verify_sabotage.py
 
       - name: Run Benchmark Suite (Fast Small Validation)

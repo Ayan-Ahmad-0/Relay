@@ -10,6 +10,7 @@ are actively enforced and not false passes.
 
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -54,7 +55,13 @@ SABOTAGE_EXPERIMENTS = [
 
 def run_test(test_target: str) -> tuple[int, str]:
     cmd = [sys.executable, "-m", "pytest", test_target, "-v", "--no-header"]
-    res = subprocess.run(cmd, cwd=str(ROOT), capture_output=True, text=True)
+    res = subprocess.run(
+        cmd,
+        cwd=str(ROOT),
+        capture_output=True,
+        text=True,
+        env=os.environ.copy(),
+    )
     return res.returncode, res.stdout + res.stderr
 
 

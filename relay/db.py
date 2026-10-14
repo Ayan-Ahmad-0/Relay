@@ -17,7 +17,7 @@ _pool: ConnectionPool | None = None
 
 
 def get_database_url() -> str:
-    return os.getenv("DATABASE_URL", DEFAULT_DATABASE_URL)
+    return os.getenv("DATABASE_URL") or os.getenv("TEST_DATABASE_URL") or DEFAULT_DATABASE_URL
 
 
 def get_connection_pool(min_size: int = 2, max_size: int = 20) -> ConnectionPool:
