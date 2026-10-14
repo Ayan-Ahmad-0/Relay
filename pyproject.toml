@@ -44,6 +44,8 @@ select = [
 ]
 ignore = [
     "B008", # do not perform function calls in argument defaults (fastapi Depends)
+    "E501", # line length handled by ruff format
+    "W291", # trailing whitespace in multiline markdown strings
 ]
 
 [tool.pytest.ini_options]

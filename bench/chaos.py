@@ -195,6 +195,13 @@ def run_chaos_suite(
         f"= {total_runs} total ---"
     )
 
+    with get_db_connection() as conn:
+        with conn.transaction():
+            with conn.cursor() as cur:
+                cur.execute(
+                    "TRUNCATE TABLE runs, run_events, step_executions, effects, approvals, leases CASCADE;"
+                )
+
     for window in windows:
         for i in range(runs_per_window):
             ok = run_chaos_iteration(runtime, sink_client, window, i)
