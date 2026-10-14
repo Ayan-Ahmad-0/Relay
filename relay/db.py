@@ -52,9 +52,13 @@ def get_db_connection() -> Generator[psycopg.Connection[dict[str, Any]], None, N
 
 
 @contextmanager
-def transaction() -> Generator[psycopg.Cursor[dict[str, Any]], None, None]:
-    """Yield a transactional cursor, auto-committing or rolling back."""
+def transaction(
+    isolation_level: str | None = None,
+) -> Generator[psycopg.Cursor[dict[str, Any]], None, None]:
+    """Yield a transactional cursor, supporting SERIALIZABLE and REPEATABLE READ isolation."""
     with get_db_connection() as conn:
         with conn.transaction():
             with conn.cursor() as cur:
+                if isolation_level:
+                    cur.execute(f"SET TRANSACTION ISOLATION LEVEL {isolation_level};")
                 yield cur

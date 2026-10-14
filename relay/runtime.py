@@ -16,6 +16,7 @@ import httpx
 
 from relay.db import transaction
 from relay.models import ApprovalRecord, EffectRecord, RunContext, RunStatus
+from relay.retry import retry_on_concurrency_conflict
 
 
 class FencingTokenError(Exception):
@@ -225,23 +226,41 @@ class ExecutionRuntime:
                 )
                 cur.fetchone()
 
-        # Step 3: Outbound call to external sink
-        sink_payload = {
-            "idempotency_key": idempotency_key,
-            "tool_name": tool_name,
-            "payload": payload,
-            "metadata": {"run_id": str(run_id), "step_sequence": step_sequence},
-        }
+        # Step 2.5: If effect was pending, check whether the external sink already logged it
+        sink_response = None
+        if existing and existing["status"] == "pending":
+            records_url = self.sink_url.rstrip("/") + f"/records?idempotency_key={idempotency_key}"
+            try:
+                if client is not None:
+                    chk = client.get(records_url, timeout=5.0)
+                else:
+                    with httpx.Client() as default_client:
+                        chk = default_client.get(records_url, timeout=5.0)
+                if chk.status_code == 200:
+                    matched_records = chk.json()
+                    if matched_records:
+                        sink_response = matched_records[0]
+            except Exception:
+                pass
 
-        if client is not None:
-            res = client.post(self.sink_url, json=sink_payload, timeout=10.0)
-            res.raise_for_status()
-            sink_response = res.json()
-        else:
-            with httpx.Client() as default_client:
-                res = default_client.post(self.sink_url, json=sink_payload, timeout=10.0)
+        # Step 3: Outbound call to external sink if not already applied
+        if sink_response is None:
+            sink_payload = {
+                "idempotency_key": idempotency_key,
+                "tool_name": tool_name,
+                "payload": payload,
+                "metadata": {"run_id": str(run_id), "step_sequence": step_sequence},
+            }
+
+            if client is not None:
+                res = client.post(self.sink_url, json=sink_payload, timeout=10.0)
                 res.raise_for_status()
                 sink_response = res.json()
+            else:
+                with httpx.Client() as default_client:
+                    res = default_client.post(self.sink_url, json=sink_payload, timeout=10.0)
+                    res.raise_for_status()
+                    sink_response = res.json()
 
         # Step 4: Mark applied conditional on fencing token
         with transaction() as cur:
@@ -337,9 +356,10 @@ class ExecutionRuntime:
                 created_at=app_row["created_at"],
             )
 
+    @retry_on_concurrency_conflict(max_retries=5)
     def resolve_approval(self, token: str, approved: bool, reason: str = "") -> RunStatus:
         """Resolve human approval gate and re-enqueue run if approved."""
-        with transaction() as cur:
+        with transaction(isolation_level="SERIALIZABLE") as cur:
             cur.execute(
                 """
                 SELECT id, run_id, status FROM approvals
