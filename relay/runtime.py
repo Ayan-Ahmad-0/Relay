@@ -32,8 +32,11 @@ class StepExecutionError(Exception):
 
 
 class ExecutionRuntime:
-    def __init__(self, sink_url: str = "http://localhost:8001/sink") -> None:
+    def __init__(
+        self, sink_url: str = "http://localhost:8001/sink", sink_client: Any = None
+    ) -> None:
         self.sink_url = sink_url
+        self.sink_client = sink_client
 
     def create_run(self, input_payload: dict[str, Any]) -> UUID:
         """Create a new queued run."""
@@ -228,11 +231,13 @@ class ExecutionRuntime:
 
         # Step 2.5: If effect was pending, check whether the external sink already logged it
         sink_response = None
+        effective_client = client or self.sink_client
+
         if existing and existing["status"] == "pending":
             records_url = self.sink_url.rstrip("/") + f"/records?idempotency_key={idempotency_key}"
             try:
-                if client is not None:
-                    chk = client.get(records_url, timeout=5.0)
+                if effective_client is not None:
+                    chk = effective_client.get(records_url, timeout=5.0)
                 else:
                     with httpx.Client() as default_client:
                         chk = default_client.get(records_url, timeout=5.0)
@@ -252,8 +257,8 @@ class ExecutionRuntime:
                 "metadata": {"run_id": str(run_id), "step_sequence": step_sequence},
             }
 
-            if client is not None:
-                res = client.post(self.sink_url, json=sink_payload, timeout=10.0)
+            if effective_client is not None:
+                res = effective_client.post(self.sink_url, json=sink_payload, timeout=10.0)
                 res.raise_for_status()
                 sink_response = res.json()
             else:

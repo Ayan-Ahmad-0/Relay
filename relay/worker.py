@@ -47,8 +47,20 @@ class Worker:
         logger.info(f"[{self.worker_id}] Claimed run {run_ctx.id} with epoch {run_ctx.claim_epoch}")
 
         try:
-            if workflow_handler is not None:
-                output = workflow_handler(run_ctx, self.runtime)
+            handler = workflow_handler
+            if handler is None:
+                # If structured ticket payload is provided, execute full Clearance + Ledgerline + Act workflow
+                payload = run_ctx.input_payload or {}
+                if any(k in payload for k in ("subject", "body", "invoice_id", "customer_email")):
+                    from relay.agent import full_support_workflow
+
+                    def default_agent_workflow(ctx: RunContext, rt: ExecutionRuntime):
+                        return full_support_workflow(ctx, rt, worker_id=self.worker_id)
+
+                    handler = default_agent_workflow
+
+            if handler is not None:
+                output = handler(run_ctx, self.runtime)
                 # Check if workflow suspended for approval
                 with get_db_connection() as conn:
                     with conn.cursor() as cur:
@@ -61,7 +73,7 @@ class Worker:
                             return True
                 self.runtime.complete_run(run_ctx.id, run_ctx.claim_epoch, output)
             else:
-                # Default minimal workflow: single step completion
+                # Default minimal workflow for basic synthetic test runs
                 self.runtime.start_step(run_ctx.id, run_ctx.claim_epoch, 1, "default_triage")
                 self.runtime.complete_step(run_ctx.id, run_ctx.claim_epoch, 1)
                 self.runtime.complete_run(

@@ -6,10 +6,12 @@ and perform background sweeps consuming zero CPU during waits.
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any
 from uuid import UUID
 
 from fastapi import FastAPI, HTTPException
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from relay.db import get_db_connection
@@ -17,6 +19,10 @@ from relay.runtime import ExecutionRuntime
 
 app = FastAPI(title="Relay Ingestion & Human-in-the-Loop Callback API", version="1.0.0")
 runtime = ExecutionRuntime()
+
+web_dir = Path(__file__).resolve().parent.parent / "web"
+if web_dir.exists():
+    app.mount("/demo", StaticFiles(directory=str(web_dir), html=True), name="demo")
 
 
 class TicketIngestionRequest(BaseModel):
