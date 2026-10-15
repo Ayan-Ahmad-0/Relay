@@ -875,13 +875,102 @@ body {
   border: 1px solid var(--border-subtle);
 }
 
+/* Scenario Explainer Card */
+.trace-scenario-card {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-active);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.scenario-badge-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.scenario-type-pill {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+}
+
+.scenario-invariant-badge {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  background: rgba(34, 197, 94, 0.15);
+  color: var(--success);
+  border: 1px solid var(--success-border);
+}
+
+.scenario-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 0.35rem 0;
+}
+
+.scenario-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 0.85rem;
+}
+
+.scenario-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1rem;
+}
+
+@media (max-width: 768px) {
+  .scenario-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+.scenario-col p {
+  font-size: 0.825rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+  margin: 0.25rem 0 0 0;
+}
+
+.col-lead-danger {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--danger);
+  letter-spacing: 0.04em;
+}
+
+.col-lead-solution {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--success);
+  letter-spacing: 0.04em;
+}
+
 .trace-meta-panel {
   display: flex;
   gap: 2rem;
-  background: var(--bg-subtle);
+  background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  padding: 0.75rem 1rem;
+  padding: 0.65rem 1rem;
   margin-bottom: 1rem;
   font-size: 0.8rem;
   flex-wrap: wrap;
@@ -893,7 +982,7 @@ body {
   gap: 0.15rem;
 }
 
-.meta-key {
+.meta-label {
   font-size: 0.7rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -1030,6 +1119,84 @@ body {
   max-height: 400px;
 }
 
+/* Step Detail Explainer Card inside Inspector */
+.step-detail-card {
+  padding: 1rem 1.25rem;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.step-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.step-detail-type {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+}
+
+.step-detail-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.step-detail-explanation {
+  font-size: 0.825rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.step-detail-box {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.85rem;
+  font-size: 0.785rem;
+  line-height: 1.45;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.step-detail-box-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.step-detail-box.danger-note {
+  border-color: rgba(239, 68, 68, 0.25);
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.step-detail-box.danger-note .step-detail-box-label {
+  color: var(--danger);
+}
+
+.step-detail-box.guardrail-note {
+  border-color: rgba(34, 197, 94, 0.25);
+  background: rgba(34, 197, 94, 0.05);
+}
+
+.step-detail-box.guardrail-note .step-detail-box-label {
+  color: var(--success);
+}
+
+
 pre {
   margin: 0;
 }
@@ -1091,6 +1258,44 @@ code {
   color: var(--text-primary);
   border-color: var(--border-active);
 }
+
+/* Simulator Window Explainer Box */
+.sim-window-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-left: 3px solid var(--warning);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.sim-window-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sim-window-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.sim-window-desc {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.sim-window-solution {
+  font-size: 0.775rem;
+  color: var(--success);
+  font-family: var(--font-mono);
+}
+
 
 .pipeline-track {
   display: flex;

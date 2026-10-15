@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=2">
+  <link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
 
@@ -319,34 +319,68 @@
       </div>
     </section>
 
-    <!-- Section: Precomputed Execution Traces -->
+    <!-- Section: Precomputed Execution Traces & Failure Scenarios -->
     <section id="traces" class="section-card">
       <div class="section-header">
         <div>
-          <h3 class="section-title">Execution Traces</h3>
-          <p class="section-desc">Inspect event-sourced replay logs without waiting on cold backend databases.</p>
+          <h3 class="section-title">Execution Traces &amp; Failure Scenarios</h3>
+          <p class="section-desc">Interactive breakdown of real failure modes (crashes, prompt injections, suspensions). Inspect what happens step-by-step and why Relay prevents side-effect corruption.</p>
         </div>
         <div class="trace-selector-tabs">
-          <button class="tab-btn active" data-trace="trace_full_integration" id="btn-trace-1">Clearance + Ledgerline</button>
-          <button class="tab-btn" data-trace="trace_crash_recovery" id="btn-trace-2">Crash at Window 2 &amp; Recovery</button>
-          <button class="tab-btn" data-trace="trace_injection_blocked" id="btn-trace-3">Prompt Injection Blocked</button>
-          <button class="tab-btn" data-trace="trace_human_approval" id="btn-trace-4">Zero-Cost Suspension</button>
+          <button class="tab-btn active" data-trace="trace_full_integration" id="btn-trace-1">1. Normal Run (Happy Path)</button>
+          <button class="tab-btn" data-trace="trace_crash_recovery" id="btn-trace-2">2. Mid-Flight Crash &amp; Fencing</button>
+          <button class="tab-btn" data-trace="trace_injection_blocked" id="btn-trace-3">3. Prompt Injection Defense</button>
+          <button class="tab-btn" data-trace="trace_human_approval" id="btn-trace-4">4. High-Value Human Gate</button>
         </div>
       </div>
 
-      <!-- Trace Overview Header -->
+      <!-- Plain-English Scenario Explainer Card -->
+      <div class="trace-scenario-card" id="trace-scenario-card">
+        <div class="scenario-badge-row">
+          <span class="scenario-type-pill" id="scenario-type-badge">Failure Recovery Scenario</span>
+          <span class="scenario-invariant-badge" id="scenario-invariant-badge">Invariant: Exactly-Once Side Effects</span>
+        </div>
+        <h4 class="scenario-title" id="scenario-title">Scenario Title</h4>
+        <p class="scenario-desc" id="scenario-desc">Detailed explanation of the scenario.</p>
+        <div class="scenario-columns">
+          <div class="scenario-col">
+            <span class="col-lead-danger">THE DANGER WITHOUT RELAY</span>
+            <p id="scenario-danger">What standard agents do wrong here.</p>
+          </div>
+          <div class="scenario-col">
+            <span class="col-lead-solution">HOW RELAY SOLVES IT</span>
+            <p id="scenario-solution">How Relay prevents double-execution or data corruption.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trace Overview Meta Panel -->
       <div class="trace-meta-panel" id="trace-meta"></div>
 
       <!-- Step Timeline & Event Inspector -->
       <div class="trace-workspace">
         <div class="timeline-column">
-          <div class="column-header">Step Sequence</div>
+          <div class="column-header">Step Sequence (Click to Inspect)</div>
           <div class="step-list" id="step-list"></div>
         </div>
 
         <div class="inspector-column">
+          <!-- Plain English Step Inspector -->
+          <div class="step-detail-card" id="step-detail-card">
+            <div class="step-detail-header">
+              <span class="step-detail-type" id="step-detail-type">Step 1 of 4</span>
+              <span class="status-pill pass" id="step-detail-status">PASS</span>
+            </div>
+            <h4 class="step-detail-title" id="step-detail-title">Step Title</h4>
+            <p class="step-detail-explanation" id="step-detail-explanation">Explanation of what happened during this step.</p>
+            <div class="step-detail-box guardrail-note" id="step-detail-guardrail-box">
+              <span class="step-detail-box-label">RELAY GUARANTEE</span>
+              <span id="step-detail-guardrail">Fencing token verified before sink execution.</span>
+            </div>
+          </div>
+
           <div class="inspector-tabs">
-            <button class="sub-tab active" data-view="event-payload">Event Sourcing Ledger</button>
+            <button class="sub-tab active" data-view="event-payload">Event Payload</button>
             <button class="sub-tab" data-view="sink-record">External Sink Record</button>
             <button class="sub-tab" data-view="db-state">Postgres Row Snapshot</button>
           </div>
@@ -373,15 +407,30 @@
       <div class="sim-container">
         <!-- Crash Window Bar -->
         <div class="crash-window-selector">
-          <label>Target Crash Window:</label>
+          <label>Target Failure Window:</label>
           <div class="crash-buttons">
-            <button class="crash-btn active" data-window="after_effect_before_commit">Window 2: after_effect_before_commit</button>
-            <button class="crash-btn" data-window="before_effect">Window 1: before_effect</button>
-            <button class="crash-btn" data-window="after_commit_before_ack">Window 3: after_commit_before_ack</button>
-            <button class="crash-btn" data-window="during_ledger_write">Window 4: during_ledger_write</button>
-            <button class="crash-btn" data-window="after_lease_release">Window 5: after_lease_release</button>
+            <button class="crash-btn active" data-window="after_effect_before_commit">Window 2: Kill After API Call, Before DB Commit (Critical)</button>
+            <button class="crash-btn" data-window="before_effect">Window 1: Kill Before API Call</button>
+            <button class="crash-btn" data-window="after_commit_before_ack">Window 3: Kill After DB Commit, Before Queue ACK</button>
+            <button class="crash-btn" data-window="during_ledger_write">Window 4: Kill During Ledger Write</button>
+            <button class="crash-btn" data-window="after_lease_release">Window 5: Kill After Task Completed</button>
           </div>
         </div>
+
+        <!-- Dynamic Explainer for Selected Window -->
+        <div class="sim-window-card" id="sim-window-card">
+          <div class="sim-window-header">
+            <span class="sim-window-title" id="sim-window-title">Window 2: Kill After External Call, Before DB Commit</span>
+            <span class="status-pill badge-crash" id="sim-window-badge">CRITICAL INVARIANT TEST</span>
+          </div>
+          <div class="sim-window-desc" id="sim-window-desc">
+            The external API call (payment/email) completes, but worker is terminated before committing completion to PostgreSQL. Naïve bots double-execute; Relay reconciles the sink and executes 0 duplicates.
+          </div>
+          <div class="sim-window-solution" id="sim-window-solution">
+            RELAY GUARANTEE: Active Sink Reconciliation queries idempotency key and prevents duplicate execution.
+          </div>
+        </div>
+
 
         <!-- Live Step Pipeline -->
         <div class="pipeline-track">
@@ -525,6 +574,6 @@
     </div>
   </footer>
 
-  <script src="app.js?v=2"></script>
+  <script src="app.js?v=4"></script>
 </body>
 </html>
