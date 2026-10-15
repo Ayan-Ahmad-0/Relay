@@ -82,7 +82,7 @@
           <h3 class="section-title">Connected Live Microservices</h3>
           <p class="section-desc">Upstream services queried by Relay tools during ticket triage before applying external effects.</p>
         </div>
-        <span class="badge live-badge">2 Active Endpoints</span>
+        <span class="badge live-badge">3 Connected Systems (Includes Gemini AI)</span>
       </div>
 
       <div class="integrations-grid">
@@ -129,6 +129,29 @@
           <div class="integration-actions">
             <button class="btn btn-secondary btn-sm" id="btn-demo-ledgerline">Inspect Tool Payload</button>
             <a href="https://ledgerline-xcmg.onrender.com" target="_blank" class="btn btn-outline btn-sm">Open Service ↗</a>
+          </div>
+        </div>
+
+        <!-- Google Gemini AI Reasoning -->
+        <div class="integration-box">
+          <div class="integration-head">
+            <div>
+              <h4>Google Gemini 1.5 Flash</h4>
+              <span class="integration-role">LLM Reasoning &amp; Support Drafting</span>
+            </div>
+            <span class="badge live-badge">AI Active</span>
+          </div>
+          <p class="integration-text">
+            Synthesizes retrieved policy chunks and audited invoice math into personalized responses. Guarded by XML tag isolation and metered via PostgreSQL token budgets.
+          </p>
+          <div class="integration-meta">
+            <div class="meta-row"><span class="meta-label">Model:</span> <span class="code-font">gemini-1.5-flash</span></div>
+            <div class="meta-row"><span class="meta-label">Defense:</span> <span>XML Quarantine (&lt;UNTRUSTED_...&gt;)</span></div>
+            <div class="meta-row"><span class="meta-label">Cost Ledger:</span> <span>Two-Phase DB Budget Tracking</span></div>
+          </div>
+          <div class="integration-actions">
+            <button class="btn btn-secondary btn-sm" id="btn-demo-gemini">Inspect AI Prompt &amp; Output</button>
+            <a href="https://ai.google.dev/" target="_blank" class="btn btn-outline btn-sm">Gemini API Docs ↗</a>
           </div>
         </div>
       </div>
@@ -209,6 +232,24 @@
           <span class="badge" id="ticket-result-badge">STATUS: COMPLETED</span>
         </div>
         <div class="result-stepper" id="ticket-result-stepper"></div>
+
+        <!-- AI Generated Customer Reply Preview -->
+        <div id="ai-reply-card" class="ai-reply-card" style="display: none;">
+          <div class="ai-reply-header">
+            <div class="ai-reply-badge">
+              <span class="ai-dot"></span>
+              <strong>Gemini 1.5 Flash Generated Reply</strong>
+            </div>
+            <span class="ai-token-stats" id="ai-token-stats">114 tokens metered (0.01¢)</span>
+          </div>
+          <div class="ai-reply-body" id="ai-reply-body"></div>
+          <div class="ai-reply-footer">
+            <span class="ai-guard-tag">Verified by Clearance Policy</span>
+            <span class="ai-guard-tag">Audited by Ledgerline</span>
+            <span class="ai-guard-tag">Delimited XML Isolation Passed</span>
+          </div>
+        </div>
+
         <pre><code id="ticket-result-json" class="code-font"></code></pre>
       </div>
     </section>

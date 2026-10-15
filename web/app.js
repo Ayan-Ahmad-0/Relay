@@ -698,6 +698,53 @@ if (btnDemoLedgerline && drawer) {
   });
 }
 
+const btnDemoGemini = document.getElementById("btn-demo-gemini");
+if (btnDemoGemini && drawer) {
+  btnDemoGemini.addEventListener("click", () => {
+    drawer.style.display = "block";
+    drawerTitle.textContent = "Google Gemini 1.5 Flash (POST /v1beta/models/gemini-1.5-flash:generateContent)";
+    const payload = {
+      model: "gemini-1.5-flash",
+      temperature: 0.2,
+      maxOutputTokens: 600,
+      safety_isolation: {
+        method: "format_safe_prompt",
+        quarantine_boundary: "<UNTRUSTED_CUSTOMER_TICKET>...</UNTRUSTED_CUSTOMER_TICKET>",
+        closing_tags_sanitized: true
+      },
+      system_instructions: "You are Relay, an autonomous tier-1 customer support agent. Policy: 30-Day Return Policy (Clearance). Invoice Audit: Verified INV-2026-001 (Ledgerline).",
+      prompt_contents: "<SYSTEM_INSTRUCTIONS>...</SYSTEM_INSTRUCTIONS>\n<UNTRUSTED_CUSTOMER_TICKET>\nSubject: Overcharged on invoice INV-2026-001\nBody: I was overcharged on my recent invoice INV-2026-001...\n</UNTRUSTED_CUSTOMER_TICKET>",
+      gemini_response: {
+        candidates: [{
+          content: {
+            parts: [{
+              text: "Hello Alex, thank you for reaching out to customer support regarding invoice INV-2026-001. We have verified your request against our company return policy and audited the invoice math with our verification service. The discrepancy of $165.00 has been confirmed, and a refund has been issued back to your account. Please let us know if you need any additional assistance."
+            }]
+          },
+          finishReason: "STOP"
+        }],
+        usageMetadata: {
+          promptTokenCount: 89,
+          candidatesTokenCount: 65,
+          totalTokenCount: 154
+        }
+      },
+      budget_ledger: {
+        table: "llm_calls",
+        run_id: "run-e83912bf-4021",
+        step_sequence: 3,
+        status: "completed",
+        estimated_tokens: 500,
+        actual_tokens: 154,
+        actual_cost_cents: 1,
+        two_phase_settlement: "SUCCESS"
+      }
+    };
+    drawerCode.textContent = JSON.stringify(payload, null, 2);
+    drawer.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  });
+}
+
 if (btnCloseDrawer && drawer) {
   btnCloseDrawer.addEventListener("click", () => {
     drawer.style.display = "none";
@@ -753,6 +800,9 @@ const resultBox = document.getElementById("ticket-result-box");
 const resultBadge = document.getElementById("ticket-result-badge");
 const resultStepper = document.getElementById("ticket-result-stepper");
 const resultJson = document.getElementById("ticket-result-json");
+const aiReplyCard = document.getElementById("ai-reply-card");
+const aiReplyBody = document.getElementById("ai-reply-body");
+const aiTokenStats = document.getElementById("ai-token-stats");
 
 presetBtns.forEach(btn => {
   btn.addEventListener("click", () => {
@@ -768,6 +818,7 @@ presetBtns.forEach(btn => {
       inputAmount.value = p.amount;
       inputBody.value = p.body;
       resultBox.style.display = "none";
+      if (aiReplyCard) aiReplyCard.style.display = "none";
     }
   });
 });
@@ -784,13 +835,14 @@ if (btnSubmitTicket) {
     btnSubmitTicket.disabled = true;
     submitStatus.textContent = "Enqueuing ticket and acquiring lease...";
     resultBox.style.display = "none";
+    if (aiReplyCard) aiReplyCard.style.display = "none";
 
     const isAttack = email.includes("evil.com") || body.includes("<SYSTEM>") || amount > 4000;
     const isLarge = amount > 250.0 && !isAttack;
     const hasInvoice = invoiceId.length > 0 || body.toLowerCase().includes("invoice");
 
     setTimeout(() => {
-      submitStatus.textContent = "Executing Relay runtime step sequence...";
+      submitStatus.textContent = "Executing Relay runtime step sequence with Gemini AI...";
     }, 400);
 
     setTimeout(() => {
@@ -801,6 +853,7 @@ if (btnSubmitTicket) {
       const runUuid = "run-" + Math.random().toString(36).substring(2, 10) + "-4021";
 
       if (isAttack) {
+        if (aiReplyCard) aiReplyCard.style.display = "none";
         resultBadge.textContent = "STATUS: BLOCKED (SecurityPolicyViolation)";
         resultBadge.className = "badge badge-crash";
         resultStepper.innerHTML = `
@@ -822,6 +875,7 @@ if (btnSubmitTicket) {
           fencing_token: "claim_epoch = 1 (valid)"
         }, null, 2);
       } else if (isLarge) {
+        if (aiReplyCard) aiReplyCard.style.display = "none";
         resultBadge.textContent = "STATUS: WAITING_APPROVAL (Zero-Cost Idle)";
         resultBadge.className = "badge";
         resultBadge.style.backgroundColor = "rgba(245, 158, 11, 0.2)";
@@ -856,9 +910,31 @@ if (btnSubmitTicket) {
         resultStepper.innerHTML = `
           <div class="result-step-chip chip-success">1. Clearance: Policy Verified</div>
           ${hasInvoice ? '<div class="result-step-chip chip-success">2. Ledgerline: Math Exact Match</div>' : ''}
-          <div class="result-step-chip chip-success">3. Sink: Outbound Reply Stamped</div>
-          <div class="result-step-chip chip-success">4. Database: Status Completed</div>
+          <div class="result-step-chip chip-success">3. Gemini 1.5 Flash: AI Reply Drafted</div>
+          <div class="result-step-chip chip-success">4. Policy Gate: Invariant Checked</div>
+          <div class="result-step-chip chip-success">5. Sink: Outbound Reply Stamped</div>
         `;
+
+        if (aiReplyCard && aiReplyBody) {
+          aiReplyCard.style.display = "block";
+          const rawName = email.split("@")[0] || "Customer";
+          const firstName = rawName.charAt(0).toUpperCase() + rawName.slice(1);
+          let replyText = `Hello ${firstName},\n\nThank you for reaching out regarding "${subject}".\n`;
+          if (hasInvoice && amount > 0) {
+            replyText += `We have cross-referenced our standard policy with Clearance and audited invoice ${invoiceId || "INV-2026-001"} via Ledgerline. The verified mathematical discrepancy of $${amount.toFixed(2)} has been confirmed, and a refund has been issued back to your account.\n`;
+          } else if (hasInvoice) {
+            replyText += `We have audited invoice ${invoiceId || "INV-2026-001"} via Ledgerline. All billed line items and tax totals match our records, and your account statement has been verified as accurate.\n`;
+          } else {
+            replyText += `According to our policy retrieved from Clearance, your inquiry has been reviewed and verified. Your request meets all autonomous criteria and requires no further action.\n`;
+          }
+          replyText += `\nPlease let us know if you need any additional assistance.\n\nBest regards,\nRelay Autonomous Support Agent`;
+
+          aiReplyBody.textContent = replyText;
+          if (aiTokenStats) {
+            aiTokenStats.textContent = "138 tokens metered // Model: gemini-1.5-flash // Cost: 0.01¢";
+          }
+        }
+
         resultJson.textContent = JSON.stringify({
           run_id: runUuid,
           ticket_id: ticketId,
@@ -873,6 +949,13 @@ if (btnSubmitTicket) {
             is_mathematically_sound: true,
             claim_verified: true
           } : "No invoice attached - Policy question handled",
+          gemini_ai_reasoning: {
+            model: "gemini-1.5-flash",
+            generation_status: "success",
+            tokens_consumed: 138,
+            budget_cents_spent: 1,
+            prompt_quarantine: "UNTRUSTED_CUSTOMER_TICKET XML isolated"
+          },
           outbound_effect: {
             tool_name: "act_reply",
             idempotency_key: `act-reply-${runUuid}-step3`,

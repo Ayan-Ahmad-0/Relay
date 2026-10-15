@@ -392,7 +392,7 @@ body {
 /* SECTION: CONNECTED LIVE SERVICES */
 .integrations-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1rem;
 }
 
@@ -672,6 +672,70 @@ body {
 .result-step-chip.chip-danger {
   border-color: var(--danger-border);
   color: var(--danger);
+}
+
+/* AI Reply Card in Execution Results */
+.ai-reply-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-active);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.15rem;
+  margin-bottom: 0.85rem;
+}
+
+.ai-reply-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.6rem;
+  font-size: 0.775rem;
+}
+
+.ai-reply-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--accent);
+  font-family: var(--font-mono);
+}
+
+.ai-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 6px rgba(199, 110, 60, 0.6);
+}
+
+.ai-token-stats {
+  font-family: var(--font-mono);
+  font-size: 0.725rem;
+  color: var(--text-muted);
+}
+
+.ai-reply-body {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+  white-space: pre-wrap;
+}
+
+.ai-reply-footer {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.ai-guard-tag {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: 2px;
+  padding: 2px 6px;
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
 }
 
 /* SECTION: TRACE VIEWER */
