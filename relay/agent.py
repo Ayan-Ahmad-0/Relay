@@ -12,6 +12,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
+from relay.llm import GeminiClient
 from relay.models import EventType, RunContext
 from relay.runtime import ExecutionRuntime
 from relay.security import ReplyActionContract
@@ -28,6 +29,7 @@ def full_support_workflow(
     clearance_client: ClearanceClient | None = None,
     ledgerline_client: LedgerlineClient | None = None,
     act_client: HostHelpdeskClient | None = None,
+    gemini_client: GeminiClient | None = None,
     worker_id: str | None = None,
 ) -> dict[str, Any]:
     """Execute complete support workflow connecting Projects 1, 2, and 3."""
@@ -103,15 +105,45 @@ def full_support_workflow(
     # Step 4: Host Helpdesk Action & Sink Stamp (Project 3)
     runtime.start_step(run_ctx.id, run_ctx.claim_epoch, step_seq, "host_act")
 
-    reply_content = f"Thank you for contacting support regarding '{subject}'."
-    if invoice_audit and invoice_audit.claim_verified:
-        reply_content += f" We verified invoice INV-{invoice_id or 'default'}: {invoice_audit.discrepancy_explanation}."
-        if proposed_refund > 0:
-            reply_content += f" A refund of ${proposed_refund:.2f} has been processed."
-    else:
-        reply_content += (
-            f" According to policy '{policy_result.get('title')}', your request has been reviewed."
+    # Attempt generative reply drafting via Gemini if configured
+    gemini = gemini_client or GeminiClient()
+    llm_draft = None
+    if gemini.is_available():
+        logger.info(
+            f"Generating AI support reply using Gemini ({gemini.model}) for ticket {ticket_id}..."
         )
+        llm_draft = gemini.generate_support_reply(
+            subject=subject,
+            body=body,
+            policy_context=policy_result,
+            invoice_context=invoice_audit.model_dump() if invoice_audit else None,
+            run_id=run_ctx.id,
+            step_sequence=step_seq,
+        )
+
+    if llm_draft and llm_draft.get("text"):
+        reply_content = llm_draft["text"]
+        runtime.record_event(
+            run_ctx.id,
+            run_ctx.claim_epoch,
+            step_seq,
+            EventType.MODEL_OUTPUT.value,
+            {
+                "model": llm_draft.get("model"),
+                "total_tokens": llm_draft.get("total_tokens"),
+                "draft": reply_content,
+            },
+        )
+        logger.info(f"AI reply generated successfully ({llm_draft.get('total_tokens', 0)} tokens)")
+    else:
+        # Deterministic template fallback
+        reply_content = f"Thank you for contacting support regarding '{subject}'."
+        if invoice_audit and invoice_audit.claim_verified:
+            reply_content += f" We verified invoice INV-{invoice_id or 'default'}: {invoice_audit.discrepancy_explanation}."
+            if proposed_refund > 0:
+                reply_content += f" A refund of ${proposed_refund:.2f} has been processed."
+        else:
+            reply_content += f" According to policy '{policy_result.get('title')}', your request has been reviewed."
 
     contract = ReplyActionContract(
         ticket_id=ticket_id,
@@ -131,6 +163,7 @@ def full_support_workflow(
     return {
         "status": "success",
         "ticket_id": ticket_id,
+        "ai_generated": bool(llm_draft and llm_draft.get("text")),
         "clearance_policy": policy_result.get("document"),
         "ledgerline_audit": invoice_audit.model_dump() if invoice_audit else None,
         "effect_idempotency_key": effect_record.idempotency_key,
