@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
 
@@ -228,29 +228,94 @@
       <!-- Live Execution Result Output -->
       <div id="ticket-result-box" class="ticket-result-box" style="display: none;">
         <div class="result-header">
-          <span class="result-title" id="ticket-result-title">Execution Result</span>
+          <div>
+            <span class="result-title" id="ticket-result-title">Autonomous Execution Pipeline</span>
+            <p class="result-subtitle" id="ticket-result-subtitle">End-to-end verified multi-service audit trail and zero-duplicate side effect guarantees.</p>
+          </div>
           <span class="badge" id="ticket-result-badge">STATUS: COMPLETED</span>
         </div>
-        <div class="result-stepper" id="ticket-result-stepper"></div>
 
-        <!-- AI Generated Customer Reply Preview -->
-        <div id="ai-reply-card" class="ai-reply-card" style="display: none;">
-          <div class="ai-reply-header">
-            <div class="ai-reply-badge">
-              <span class="ai-dot"></span>
-              <strong>Gemini 1.5 Flash Generated Reply</strong>
+        <!-- Plain-English Executive Summary Callout -->
+        <div id="result-summary-callout" class="result-summary-callout">
+          <div class="summary-lead" id="result-summary-lead">Triage Summary</div>
+          <p class="summary-text" id="result-summary-text"></p>
+        </div>
+
+        <!-- 4 Multi-Stage Visual Breakdown Cards -->
+        <div class="result-cards-grid" id="result-cards-grid">
+          <!-- Step 1: Policy Retrieval (Clearance) -->
+          <div class="stage-card" id="stage-clearance">
+            <div class="stage-header">
+              <div class="stage-header-title">
+                <span class="stage-number">01</span>
+                <div>
+                  <h5 class="stage-title">Policy Intelligence</h5>
+                  <span class="stage-sub">Project 1 (Clearance)</span>
+                </div>
+              </div>
+              <span class="stage-v stage-v-success" id="stage-clearance-status">VERIFIED</span>
             </div>
-            <span class="ai-token-stats" id="ai-token-stats">114 tokens metered (0.01¢)</span>
+            <div class="stage-body" id="stage-clearance-body"></div>
           </div>
-          <div class="ai-reply-body" id="ai-reply-body"></div>
-          <div class="ai-reply-footer">
-            <span class="ai-guard-tag">Verified by Clearance Policy</span>
-            <span class="ai-guard-tag">Audited by Ledgerline</span>
-            <span class="ai-guard-tag">Delimited XML Isolation Passed</span>
+
+          <!-- Step 2: Arithmetic Audit (Ledgerline) -->
+          <div class="stage-card" id="stage-ledgerline">
+            <div class="stage-header">
+              <div class="stage-header-title">
+                <span class="stage-number">02</span>
+                <div>
+                  <h5 class="stage-title">Invoice Arithmetic Audit</h5>
+                  <span class="stage-sub">Project 2 (Ledgerline)</span>
+                </div>
+              </div>
+              <span class="stage-v stage-v-success" id="stage-ledgerline-status">MATH SOUND</span>
+            </div>
+            <div class="stage-body" id="stage-ledgerline-body"></div>
+          </div>
+
+          <!-- Step 3: LLM Support Reply (Gemini 1.5 Flash) -->
+          <div class="stage-card stage-card-wide" id="stage-gemini">
+            <div class="stage-header">
+              <div class="stage-header-title">
+                <span class="stage-number">03</span>
+                <div>
+                  <h5 class="stage-title">AI Customer Reply Draft</h5>
+                  <span class="stage-sub">Google Gemini 1.5 Flash Reasoning</span>
+                </div>
+              </div>
+              <span class="ai-token-stats" id="ai-token-stats">138 tokens metered (0.01¢)</span>
+            </div>
+            <div class="stage-body">
+              <div class="ai-message-bubble" id="ai-reply-body"></div>
+              <div class="ai-reply-footer" id="ai-reply-footer">
+                <span class="ai-guard-tag">Verified by Clearance Policy</span>
+                <span class="ai-guard-tag">Audited by Ledgerline</span>
+                <span class="ai-guard-tag">Delimited XML Isolation Passed</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 4: Outbound Action & Idempotency Guarantee (Relay) -->
+          <div class="stage-card stage-card-wide" id="stage-action">
+            <div class="stage-header">
+              <div class="stage-header-title">
+                <span class="stage-number">04</span>
+                <div>
+                  <h5 class="stage-title">Outbound Action &amp; Fencing Protection</h5>
+                  <span class="stage-sub">Relay Runtime + External Deduplicating Sink</span>
+                </div>
+              </div>
+              <span class="badge verified-badge" id="stage-action-badge">ZERO DUPLICATES GUARANTEED</span>
+            </div>
+            <div class="stage-body" id="stage-action-body"></div>
           </div>
         </div>
 
-        <pre><code id="ticket-result-json" class="code-font"></code></pre>
+        <!-- Collapsible Raw JSON Telemetry -->
+        <details class="raw-json-details" id="raw-json-details">
+          <summary class="raw-json-summary">Inspect Raw PostgreSQL &amp; Sink Event Payload (JSON)</summary>
+          <pre><code id="ticket-result-json" class="code-font"></code></pre>
+        </details>
       </div>
     </section>
 
@@ -460,6 +525,6 @@
     </div>
   </footer>
 
-  <script src="app.js"></script>
+  <script src="app.js?v=2"></script>
 </body>
 </html>
